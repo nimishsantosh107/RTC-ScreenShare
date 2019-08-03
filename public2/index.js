@@ -1,29 +1,14 @@
 const socket = io();
 const signalBtn = document.querySelector("#signalBtn");
-
 signalBtn.addEventListener('click', function () {
 	socket.emit("sendSignal",peerid);
 });
 
-socket.on("connect", function () {console.log('CONNECTED TO SERVER');});
-
-socket.on("receivedSignal", function (data) {
-	console.log('RECEIVED SIGNAL: ',data);
-
-	conn = peer.connect(data);
-
-	conn.on('open', function() {
-		// Receive messages
-		conn.on('data', function(data) {
-			console.log('RECEIVED:', data);
-		});
-
-		//SEND MSG
-	});
-});
-
 var peer = new Peer();
 var peerid = null;
+var connExt = null;
+
+socket.on("connect", function () {console.log('CONNECTED TO SERVER');});
 
 peer.on('open', function(id) {
   	console.log('PEER ID: ' + id);
@@ -31,18 +16,24 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', function(conn) {
-	console.log(conn);
-
 	conn.on('open', function() {
-	  	// Receive messages
+	  	//RECV MESSAGE
 		conn.on('data', function(data) {
 		    console.log('RECEIVED:', data);
 		});
 
+		//GLOBALISE VAR TOP ACCESS OUTSIDE
+		connExt = conn;
 		//SEND MSG
 	});
 });
 
+peer.on('call', function(call){
+	call.answer()
+	call.on('stream', function(stream) {
+	  	video.srcObject = stream;
+	});
+});
 
 //SIMPLE_PEER
 /*

@@ -1,57 +1,51 @@
 const socket = io();
-const shareBtn = document.querySelector("#shareBtn");
 const signalBtn = document.querySelector("#signalBtn");
-
-shareBtn.addEventListener('click', function(){
-	mediaConfig = {};
-	navigator.mediaDevices.getDisplayMedia(mediaConfig).then(function(stream){
-		window.stream = stream;
-		// video.srcObject = stream;
-	},function(err){console.log("GET_USR_MEDIA_ERR: ",err);});
-});
-
+const connectBtn = document.querySelector("#connectBtn");
+const callBtn = document.querySelector("#callBtn");
+//ONLY TESTING
 signalBtn.addEventListener('click', function () {
 	socket.emit("sendSignal",peerid);
 });
-
-socket.on("connect", function () {console.log('CONNECTED TO SERVER');});
-
-socket.on("receivedSignal", function (data) {
-	console.log('RECEIVED SIGNAL: ',data);
-
-	conn = peer.connect(data);
-
+//STREAMS
+callBtn.addEventListener('click', async function(){
+	mediaConfig = {};
+	await navigator.mediaDevices.getDisplayMedia(mediaConfig).then(function(stream){
+		window.stream = stream;
+	},function(err){console.log("GET_USR_MEDIA_ERR: ",err);});
+	//call remote id
+	call = peer.call(remoteid, stream);
+});
+//OTHER DATA
+connectBtn.addEventListener('click',function () {
+	conn = peer.connect(remoteid);
 	conn.on('open', function() {
-		// Receive messages
+		//RECV MESSAGE
 		conn.on('data', function(data) {
 			console.log('RECEIVED:', data);
 		});
-
 		//SEND MSG
-		conn.send("HIII");
+		conn.send("PEER MESSAGE");
 	});
 });
 
 var peer = new Peer();
 var peerid = null;
+var remoteid = null;
+var conn = null;
+var call = null;
+
+socket.on("connect", function () {console.log('CONNECTED TO SERVER');});
+
+socket.on("receivedSignal", function (data) {
+	console.log('RECEIVED SIGNAL: ',data);
+	remoteid = data;
+});
 
 peer.on('open', function(id) {
-  console.log('PEER ID: ' + id);
-  peerid = id;
+  	console.log('PEER ID: ' + id);
+  	peerid = id;
 });
 
-peer.on('connection', function(conn) {
-	console.log(conn);
-
-	conn.on('open', function() {
-	  	// Receive messages
-		conn.on('data', function(data) {
-		    console.log('RECEIVED:', data);
-		});
-
-		//SEND MSG
-	});
-});
 
 //SIMPLE_PEER
 /*
