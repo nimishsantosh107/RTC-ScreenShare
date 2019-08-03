@@ -13,7 +13,7 @@ const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 var app = express();
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 var httpsServer = https.createServer(credentials, app);
 var io = socketIO(httpsServer);
 
@@ -23,7 +23,12 @@ app.use('/2',express.static(path.join(__dirname,"public2")));
 io.on("connection",(socket)=>{
 	console.log("CONNECTED: ",socket.id);
 
-	
+	socket.on("sendSignal",(data)=>{
+		console.log('--------------------');
+		console.log(data);
+		console.log('--------------------');
+		socket.broadcast.emit("receivedSignal",data);
+	});
 
 	socket.on("disconnect",()=>{console.log("DISCONNECTED: ",socket.id);});
 });
