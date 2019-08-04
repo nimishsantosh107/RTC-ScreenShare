@@ -7,6 +7,8 @@ signalBtn.addEventListener('click', function () {
 var peer = new Peer();
 var peerid = null;
 var connExt = null;
+var displayId = null;
+var audioId = null;
 
 socket.on("connect", function () {console.log('CONNECTED TO SERVER');});
 
@@ -16,10 +18,15 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', function(conn) {
-	conn.on('open', function() {
+    conn.on('open', function() {
 	  	//RECV MESSAGE
-		conn.on('data', function(data) {
-		    console.log('RECEIVED:', data);
+
+        conn.on('data', function(data) {
+            data = JSON.parse(data);
+            console.log('RECEIVED:', data);
+            displayId = data.display;
+            audioId = data.audio;
+
 		});
 
 		//GLOBALISE VAR TOP ACCESS OUTSIDE
@@ -29,10 +36,13 @@ peer.on('connection', function(conn) {
 });
 
 peer.on('call', function(call){
-	call.answer()
-	call.on('stream', function(stream) {
-	  	video.srcObject = stream;
-	});
+    call.answer()
+  	call.on('stream', function(stream) {
+  	  	if(stream.id === displayId)
+            video.srcObject = stream;
+        else if(stream.id === audioId)
+            audio.srcObject = stream;
+    });
 });
 
 //SIMPLE_PEER

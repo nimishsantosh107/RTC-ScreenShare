@@ -1,19 +1,37 @@
 const socket = io();
-const signalBtn = document.querySelector("#signalBtn");
-const connectBtn = document.querySelector("#connectBtn");
 const callBtn = document.querySelector("#callBtn");
+const connectBtn = document.querySelector("#connectBtn");
+const getStreamBtn = document.querySelector("#getStreamBtn");
 //ONLY TESTING
-signalBtn.addEventListener('click', function () {
-	socket.emit("sendSignal",peerid);
+callBtn.addEventListener('click', function () {
+	//call remote id
+	call = peer.call(remoteid, displayStream);
+	call = peer.call(remoteid, audioStream);
 });
 //STREAMS
-callBtn.addEventListener('click', async function(){
-	mediaConfig = {};
-	await navigator.mediaDevices.getDisplayMedia(mediaConfig).then(function(stream){
-		window.stream = stream;
-	},function(err){console.log("GET_USR_MEDIA_ERR: ",err);});
-	//call remote id
-	call = peer.call(remoteid, stream);
+getStreamBtn.addEventListener('click', async function(){
+
+	var displayConfig = {}
+
+	var mediaConfig = {
+		audio: true,
+	}
+
+	await navigator.mediaDevices.getDisplayMedia(displayConfig).then(function(stream){
+		window.displayStream = stream;
+	},function(err){console.log("GET_DISPLAY_MEDIA_ERR: ",err);});
+
+	await navigator.mediaDevices.getUserMedia(mediaConfig).then(function(stream){
+		window.audioStream = stream;
+	},function(err){console.log("GET_USER_MEDIA_ERR: ",err);});
+
+	var streamIds = {
+		display: displayStream.id,
+		audio: audioStream.id
+	}
+	
+	conn.send(JSON.stringify(streamIds));
+
 });
 //OTHER DATA
 connectBtn.addEventListener('click',function () {
@@ -24,7 +42,7 @@ connectBtn.addEventListener('click',function () {
 			console.log('RECEIVED:', data);
 		});
 		//SEND MSG
-		conn.send("PEER MESSAGE");
+		//conn.send("PEER MESSAGE");
 	});
 });
 

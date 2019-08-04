@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const path = require('path');
 
 const PORT = 2000;
-const IP = "192.168.1.4";
+const IP = "192.168.1.5";
 const privateKey  = fs.readFileSync('./SSL_KEY/rtc.key', 'utf8');
 const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
