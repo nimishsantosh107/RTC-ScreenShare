@@ -3,7 +3,6 @@ const socketIO = require('socket.io');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
-const bodyParser = require('body-parser')
 const path = require('path');
 
 const PORT = 3000;
@@ -13,7 +12,6 @@ const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 var app = express();
-// app.use(bodyParser.json());
 var httpsServer = https.createServer(credentials, app);
 var io = socketIO(httpsServer);
 
