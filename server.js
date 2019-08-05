@@ -6,8 +6,8 @@ const fs = require('fs');
 const bodyParser = require('body-parser')
 const path = require('path');
 
-const PORT = 2000;
-const IP = "192.168.1.5";
+const PORT = 3000;
+const IP = "192.168.1.100";
 const privateKey  = fs.readFileSync('./SSL_KEY/rtc.key', 'utf8');
 const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
@@ -17,8 +17,9 @@ var app = express();
 var httpsServer = https.createServer(credentials, app);
 var io = socketIO(httpsServer);
 
-app.use('/1',express.static(path.join(__dirname,"public1")));
-app.use('/2',express.static(path.join(__dirname,"public2")));
+app.use('/',express.static(path.join(__dirname,"routes/root")));
+app.use('/server',express.static(path.join(__dirname,"routes/server")));
+app.use('/client',express.static(path.join(__dirname,"routes/client")));
 
 io.on("connection",(socket)=>{
 	console.log("CONNECTED: ",socket.id);
