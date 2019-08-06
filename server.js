@@ -20,16 +20,11 @@ app.use('/server',express.static(path.join(__dirname,"routes/server")));
 app.use('/client',express.static(path.join(__dirname,"routes/client")));
 
 io.on("connection",(socket)=>{
-	console.log("CONNECTED: ",socket.id);
+	console.log("+ CONNECTED: ",socket.id);
 
-	socket.on("sendSignal",(data)=>{
-		console.log('--------------------');
-		console.log(data);
-		console.log('--------------------');
-		socket.broadcast.emit("receivedSignal",data);
-	});
+	socket.on("sendSignal",(data)=>{socket.broadcast.emit("receivedSignal",data);});
 
-	socket.on("disconnect",()=>{console.log("DISCONNECTED: ",socket.id);});
+	socket.on("disconnect",()=>{console.log("- DISCONNECTED: ",socket.id);});
 });
 
 httpsServer.listen(PORT, IP4, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);});

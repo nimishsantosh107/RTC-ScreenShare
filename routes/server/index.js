@@ -2,8 +2,9 @@ const socket = io();
 const callBtn = document.querySelector("#callBtn");
 const connectBtn = document.querySelector("#connectBtn");
 const getStreamBtn = document.querySelector("#getStreamBtn");
+//const sockSreamBtn = document.querySelector("#sockSreamBtn");
 
-//FIRST CONNECT TO TRANSFER DATA
+//[R]FIRST CONNECT TO TRANSFER DATA
 connectBtn.addEventListener('click',function () {
 	conn = peer.connect(remoteid);
 	conn.on('open', function() {
@@ -14,7 +15,7 @@ connectBtn.addEventListener('click',function () {
 		//SEND MSG
 	});
 });
-//SEND AUDIO/VIDEO STREAM IDS
+//[R]SEND AUDIO/VIDEO STREAM IDS
 getStreamBtn.addEventListener('click', async function(){
 	var displayConfig = {}
 	var mediaConfig = {
@@ -35,7 +36,7 @@ getStreamBtn.addEventListener('click', async function(){
 	
 	conn.send(JSON.stringify(streamIds));
 });
-//CALL AND SEND BOTH STREAMS
+//[R]CALL AND SEND BOTH STREAMS
 callBtn.addEventListener('click', function () {
 	//call remote id
 	call = peer.call(remoteid, displayStream);
