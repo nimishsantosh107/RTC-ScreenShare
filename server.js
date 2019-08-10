@@ -14,7 +14,7 @@ const credentials = {key: privateKey, cert: certificate};
 var app = express();
 var httpServer = http.Server(app);
 //var httpsServer = https.createServer(credentials, app);
-var io = socketIO(httpServer);
+var io = socketIO(httpServer); //HTTPS
 
 app.use('/',express.static(path.join(__dirname,"routes/root")));
 app.use('/server',express.static(path.join(__dirname,"routes/server")));
@@ -28,4 +28,4 @@ io.on("connection",(socket)=>{
 	socket.on("disconnect",()=>{console.log("- DISCONNECTED: ",socket.id);});
 });
 
-httpServer.listen(PORT, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);});
+httpServer.listen(PORT, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);}); //HTTPS
