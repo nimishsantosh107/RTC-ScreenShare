@@ -5,7 +5,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const IP4 = "192.168.1.100";
 const privateKey  = fs.readFileSync('./SSL_KEY/rtc.key', 'utf8');
 const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
@@ -27,4 +27,4 @@ io.on("connection",(socket)=>{
 	socket.on("disconnect",()=>{console.log("- DISCONNECTED: ",socket.id);});
 });
 
-httpsServer.listen(PORT, IP4, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);});
+httpsServer.listen(PORT, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);});
