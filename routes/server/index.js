@@ -2,7 +2,6 @@ const socket = io();
 const callBtn = document.querySelector("#callBtn");
 const connectBtn = document.querySelector("#connectBtn");
 const getStreamBtn = document.querySelector("#getStreamBtn");
-//const sockSreamBtn = document.querySelector("#sockSreamBtn");
 
 //[R]FIRST CONNECT TO TRANSFER DATA
 connectBtn.addEventListener('click',function () {
