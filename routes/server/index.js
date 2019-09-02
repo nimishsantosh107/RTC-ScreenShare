@@ -20,11 +20,11 @@ getStreamBtn.addEventListener('click', async function(){
 	var mediaConfig = {
 		audio: true,
 	}
-	navigator.mediaDevices.getDisplayMedia(displayConfig).then(function(stream){
+	await navigator.mediaDevices.getDisplayMedia(displayConfig).then(function(stream){
 		window.displayStream = stream;
 	},function(err){console.log("GET_DISPLAY_MEDIA_ERR: ",err);});
 
-	navigator.mediaDevices.getUserMedia(mediaConfig).then(function(stream){
+	await navigator.mediaDevices.getUserMedia(mediaConfig).then(function(stream){
 		window.audioStream = stream;
 	},function(err){console.log("GET_USER_MEDIA_ERR: ",err);});
 
