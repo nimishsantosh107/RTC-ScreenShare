@@ -6,15 +6,15 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const IP4 = "192.168.1.100";
+const IP4 = "192.168.0.100";
 const privateKey  = fs.readFileSync('./SSL_KEY/rtc.key', 'utf8');
 const certificate = fs.readFileSync('./SSL_KEY/rtc.crt', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 var app = express();
-var httpServer = http.Server(app);
-//var httpsServer = https.createServer(credentials, app);
-var io = socketIO(httpServer); //HTTPS
+// var httpServer = http.Server(app);
+var httpsServer = https.createServer(credentials, app);
+var io = socketIO(httpsServer); //HTTPS
 
 app.use('/',express.static(path.join(__dirname,"routes/root")));
 app.use('/server',express.static(path.join(__dirname,"routes/server")));
@@ -28,4 +28,4 @@ io.on("connection",(socket)=>{
 	socket.on("disconnect",()=>{console.log("- DISCONNECTED: ",socket.id);});
 });
 
-httpServer.listen(PORT, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);}); //HTTPS
+httpsServer.listen(PORT, IP4, ()=>{console.log(`HTTPS SERVER UP ON PORT: ${PORT}`);}); //HTTPS, IP4
